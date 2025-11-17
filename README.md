@@ -1,182 +1,193 @@
-# 📘 Project README – AI PDF Chatbot with Qdrant + Gemini + n8n
+# 📘 AI PDF Chatbot – n8n + Qdrant + Google Gemini (RAG System)
 
-This project contains **two workflows** built in **n8n**, enabling:
+A fully functional **AI-powered PDF Chatbot** built using **n8n**, **Qdrant Vector Database**, **Google Gemini**, and **LangChain**. The system lets users upload PDFs, automatically processes them into embeddings, and allows a chatbot to answer questions using Retrieval-Augmented Generation (RAG).
 
-1. **PDF Uploading & Vector Storage (Workflow 1)**
-2. **AI Chatbot with RAG + Memory + Streaming (Workflow 2)**
-
-Together, they form a complete document‑aware chatbot system using **Google Gemini**, **LangChain**, and **Qdrant Vector DB**.
+This repository contains **two n8n workflows** that together create a complete knowledge-based AI chat system.
 
 ---
 
-# 🚀 Overview
+# 🚀 Features
 
-This system lets users:
-
-* Upload PDF files via a public form.
-* Automatically extract text → chunk → embed → store vectors in Qdrant.
-* Query the documents using an AI chatbot.
-* Receive answers from Gemini using RAG (Retrieval‑Augmented Generation).
-
----
-
-# 📂 Workflow 1 – PDF Upload & Vectorization
-
-Workflow name: **Upload & Index PDF Document**
-
-### 🧩 Purpose
-
-Handles document ingestion and prepares the knowledge base by:
-
-1. Accepting PDF upload via form trigger.
-2. Loading PDF content.
-3. Splitting text into optimized chunks.
-4. Generating embeddings with Google Gemini.
-5. Storing embeddings + metadata into Qdrant collection (`chatbot_docs`).
-
-### ⚙️ Workflow Components
-
-#### **1. Form Trigger (n8n-nodes-base.formTrigger)**
-
-* Lets the user upload a PDF.
-* Accepts only `.pdf`
-* Required field.
-
-#### **2. Default Data Loader (PDF Loader)**
-
-* Extracts text from PDF binary file.
-* Converts into raw text data.
-
-#### **3. Recursive Text Splitter**
-
-* Splits text into chunks.
-* Chunk overlap: **200 characters**.
-
-#### **4. Gemini Embeddings Node**
-
-* Generates vector embeddings using **Google Gemini**.
-
-#### **5. Qdrant Vector Store (Insert Mode)**
-
-* Saves chunked documents + embeddings in `chatbot_docs` collection.
-
-### 📊 Data Flow
-
-Form → Data Loader → Text Splitter → Gemini Embeddings → Qdrant Store
+* 📤 **Upload PDFs** via public form
+* 🔍 Automatic **text extraction + chunking**
+* 🧠 **Embeddings** generated using Google Gemini
+* 🗄️ **Vector storage** in Qdrant (`chatbot_docs` collection)
+* 💬 **Chatbot with RAG** retrieves relevant document chunks
+* 🧵 **Streaming responses** via webhook
+* 🧩 Short-term **memory buffer** for more natural conversations
 
 ---
 
-# 💬 Workflow 2 – AI Chatbot with RAG Retrieval
+# 🏗️ Architecture Overview
 
-Workflow name: **AI Chatbot (Streaming + RAG)**
+```
+PDF Upload → Text Loader → Text Splitter → Gemini Embeddings → Qdrant Vector Store
 
-### 🧩 Purpose
-
-Provides an intelligent chatbot that:
-
-* Receives user messages via webhook.
-* Uses Gemini Chat model to respond.
-* Retrieves relevant context from Qdrant.
-* Maintains short-term memory.
-* Streams responses in real‑time.
-
-### ⚙️ Workflow Components
-
-#### **1. Chat Trigger (Webhook)**
-
-* Public webhook for receiving chat messages.
-* Streaming mode enabled.
-
-#### **2. Google Gemini Chat Model**
-
-* LLM used for generating answers.
-* Temperature: **0.3** (balanced factual responses).
-* Top‑K: **4**.
-
-#### **3. Memory Buffer Window**
-
-* Stores recent conversation history.
-* Provides better contextual responses.
-
-#### **4. Qdrant Vector Store (RAG Tool Mode)**
-
-* Retrieves relevant document chunks.
-* Used by the agent as a knowledge tool.
-
-#### **5. Gemini Embeddings**
-
-* Required for compatible vector retrieval in Qdrant.
-
-#### **6. AI Agent Node**
-
-* Combines:
-
-  * LLM
-  * Memory
-  * Vector tool
-  * Streaming responses
-* Orchestrates the full conversation.
-
-### 📊 Data Flow
-
-Webhook → AI Agent → (Gemini LLM + Memory + Qdrant Retrieval) → Streaming Response
+User Query → Chat Trigger → AI Agent → (LLM + Memory + Qdrant Retrieval) → Streaming Response
+```
 
 ---
 
-# 🗄️ Qdrant Collection Used
+# 📂 Workflows Included
 
-**Collection Name:** `chatbot_docs`
+## 1️⃣ Workflow 1 – PDF Upload & Vectorization
 
-Both workflows rely on this shared vector store:
+**Purpose:** Ingest documents into the chatbot knowledge base.
 
-* Workflow 1 inserts documents.
-* Workflow 2 retrieves documents.
+### What it does:
 
-<!-- Ensure the collection exists or allow n8n to auto‑create it. -->
+* Accepts PDF file upload
+* Extracts all text
+* Splits text into chunks (200-character overlap)
+* Generates embeddings (Google Gemini)
+* Stores vectors into **Qdrant** (`chatbot_docs`)
 
----
+### Key Nodes:
 
-# 🔧 Requirements
-
-* n8n v1.50+
-* Qdrant Cloud or local Qdrant instance
-* Google Gemini API Key (Google Palm/Gemini)
-
----
-
-# 📡 Deployment Notes
-
-* Workflow 2 exposes a **webhook** → can be integrated with a frontend chat UI.
-* Workflow 1 exposes a **form** → can be embedded for client‑side document uploads.
-* Make sure both workflows share the **same Qdrant credentials**.
+* `Form Trigger`
+* `Default Data Loader (PDF Loader)`
+* `Recursive Character Text Splitter`
+* `Google Gemini Embeddings`
+* `Qdrant Vector Store (Insert)`
 
 ---
 
-# 🧪 Testing Instructions
+## 2️⃣ Workflow 2 – AI Chatbot (RAG + Streaming)
 
-### To test Workflow 1:
+**Purpose:** Provide intelligent chat responses using stored PDFs.
 
-1. Open the Form Trigger URL.
-2. Upload a PDF.
-3. In Qdrant dashboard, confirm new vectors were added.
+### What it does:
 
-### To test Workflow 2:
+* Listens to user messages via public webhook
+* Retrieves context from Qdrant
+* Uses Gemini Chat Model to answer
+* Streams the response back
+* Maintains a conversation memory buffer
 
-1. Send a POST request to the webhook with `userMessage`.
-2. Ask a question related to the uploaded PDF.
-3. Validate that:
+### Key Nodes:
 
-   * AI retrieves relevant chunks.
-   * Gemini answers using document context.
+* `Chat Trigger`
+* `AI Agent`
+* `Google Gemini Chat Model`
+* `Memory Buffer Window`
+* `Qdrant Vector Store (Tool Mode)`
 
 ---
 
-# 📘 Summary
+# 🛠️ Requirements
 
-This two‑workflow system forms a **complete RAG chatbot pipeline**:
+* **n8n** 1.50+
+* **Qdrant Cloud** or local Qdrant instance
+* **Google Gemini API Key** (Gemini 1.5 / PaLM API)
+* LangChain nodes enabled in n8n
 
-* **Workflow 1:** PDF → Text → Chunk → Embed → Vector Store
-* **Workflow 2:** User Query → Retrieval → Gemini Response → Streaming Chatbot
+---
 
-It's clean, scalable, and easily extendable for multi‑document or multi‑user knowledge bases.
+# 🔧 Setup Instructions
 
+## 1. Clone/Import Workflows
+
+Import both JSON workflow files inside the repository into your n8n instance.
+
+## 2. Configure Credentials
+
+You must add credentials in n8n:
+
+* **Qdrant API Key**
+* **Google Palm/Gemini API Key**
+
+Ensure both workflows use the same Qdrant collection name:
+
+```
+chatbot_docs
+```
+
+## 3. Enable Webhook URLs
+
+* Workflow 1 generates a **public form URL** → PDF uploader
+* Workflow 2 exposes a **chat webhook URL** → for frontend chat UI
+
+## 4. Test the Pipeline
+
+### Test Workflow 1
+
+1. Open the form link.
+2. Upload any PDF.
+3. Check Qdrant → verify vectors added.
+
+### Test Workflow 2
+
+1. Send a POST request to the webhook:
+
+```json
+{ "message": "Summarize the uploaded document" }
+```
+
+2. Receive streaming response.
+3. Verify chatbot uses PDF context.
+
+---
+
+---
+
+# 🗄️ Qdrant Collection Structure
+
+Collection Name: **chatbot_docs**
+
+Each stored vector contains:
+
+* Chunked text
+* Embedding
+* Metadata
+* Source information
+
+---
+
+# 🧪 Example Use Cases
+
+* Customer support knowledge base
+* Internal documentation chatbot
+* Product manual assistant
+* Research paper question-answering
+* Legal or financial document analysis
+
+---
+
+# 🤖 Tech Stack
+
+* **n8n** (automation + workflow engine)
+* **LangChain** (AI pipeline orchestration)
+* **Google Gemini** (LLM + Embeddings)
+* **Qdrant** (vector database)
+* **JavaScript/TypeScript** (n8n custom logic)
+
+---
+
+# 📌 Future Enhancements
+
+* 🔒 User authentication for uploads
+
+---
+
+# ❤️ Author / Maintainer
+
+This project is built and maintained by **Syed Shahid Ali** — Full Stack Developer & n8n Automation Specialist.
+
+For collaboration opportunities or automation projects:
+<!-- 📧 Email: *add your email here* -->
+💼 LinkedIn: *https://www.linkedin.com/in/syed-shahid-ali-ssa*
+
+---
+
+# ⭐ Support
+
+If you found this project useful:
+
+* Give it a **star** ⭐ on GitHub!
+* Fork it and create your own document-aware chatbot.
+
+---
+
+# 📄 License
+
+MIT License – free to use, modify, and distribute.
