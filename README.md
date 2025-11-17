@@ -9,6 +9,9 @@ This repository contains **two n8n workflows** that together create a complete k
 
 [Watch the video on YouTube](https://youtu.be/BBSIhecODTQ)
 
+### First you will build your knowledge-base by uploading all of your PDF files using this form.
+![example](./build-knowledge-base.png)
+## Chatbot UI (Fully Customizable)
 ![example](./n8n-rag-ai-agent-project-demo.png)
 
 ---
