@@ -4,6 +4,13 @@ A fully functional **AI-powered PDF Chatbot** built using **n8n**, **Qdrant Vect
 
 This repository contains **two n8n workflows** that together create a complete knowledge-based AI chat system.
 
+
+## 📺 Video Demo
+
+[Watch the video on YouTube](https://youtu.be/BBSIhecODTQ)
+
+![example](./n8n-rag-ai-agent-project-demo.png)
+
 ---
 
 # 🚀 Features
