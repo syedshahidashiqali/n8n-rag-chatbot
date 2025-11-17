@@ -1,3 +1,4 @@
+
 # 📘 AI PDF Chatbot – n8n + Qdrant + Google Gemini (RAG System)
 
 A fully functional **AI-powered PDF Chatbot** built using **n8n**, **Qdrant Vector Database**, **Google Gemini**, and **LangChain**. The system lets users upload PDFs, automatically processes them into embeddings, and allows a chatbot to answer questions using Retrieval-Augmented Generation (RAG).
@@ -9,10 +10,19 @@ This repository contains **two n8n workflows** that together create a complete k
 
 [Watch the video on YouTube](https://youtu.be/BBSIhecODTQ)
 
-### First you will build your knowledge-base by uploading all of your PDF files using this form.
-![example](./build-knowledge-base.png)
-## Chatbot UI (Fully Customizable)
-![example](./n8n-rag-ai-agent-project-demo.png)
+### Build Your Knowledge Base
+
+First, upload all your PDF files to create your knowledge base. This form handles PDF ingestion, text extraction, chunking, and embedding into Qdrant.
+
+![Build Knowledge Base](./build-knowledge-base.png)
+*Example: Upload PDFs and process them into the chatbot knowledge base.*
+
+### Chatbot UI (Fully Customizable)
+
+Once your knowledge base is ready, interact with your AI chatbot via the test frontend.
+
+![Chatbot Demo](./n8n-rag-ai-agent-project-demo.png)
+*Example: Chatbot responding to user queries using the uploaded PDFs.*
 
 ---
 
