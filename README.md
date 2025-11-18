@@ -8,7 +8,8 @@ This repository contains **two n8n workflows** that together create a complete k
 
 ## 📺 Video Demo
 
-[Watch the video on YouTube](https://youtu.be/BBSIhecODTQ)
+<!-- [Watch the video on YouTube](https://youtu.be/BBSIhecODTQ) -->
+[Watch the video on YouTube](https://youtu.be/IE5NvR4IVlU)
 
 ### Build Your Knowledge Base
 
