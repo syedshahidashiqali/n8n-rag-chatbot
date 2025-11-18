@@ -21,7 +21,14 @@ First, upload all your PDF files to create your knowledge base. This form handle
 
 Once your knowledge base is ready, interact with your AI chatbot via the test frontend.
 
-![Chatbot Demo](./n8n-rag-ai-agent-project-demo.png)
+<!--- ![Chatbot Demo](./n8n-rag-ai-agent-project-demo.png) -->
+<!-- ![Chatbot Demo](./n8n-rag-ai-agent-project-demo-personal.png) -->
+<p>
+  <img src="./n8n-rag-ai-agent-project-demo.png" width="45%" />
+  <img src="./n8n-rag-ai-agent-project-demo-personal.png" width="45%" />
+</p>
+
+
 *Example: Chatbot responding to user queries using the uploaded PDFs.*
 
 ---
